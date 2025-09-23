@@ -14,7 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RoomDataBaseTheme {
-
+                val db = AppDatabase.getInstance(this)
+                NoteScreen(db = db) // Pass DAO only
             }
         }
     }

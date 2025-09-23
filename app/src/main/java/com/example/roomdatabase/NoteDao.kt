@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+// we use this to talk to WeatherNote table
 // NoteDao -> This is how I talk to my room table
 @Dao // marks this interface as the data-access object.
 interface NoteDao {

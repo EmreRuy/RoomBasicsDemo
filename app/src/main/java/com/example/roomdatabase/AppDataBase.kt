@@ -35,9 +35,9 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "northflurry_db"
             )
-                .fallbackToDestructiveMigration(false)
-                .build()
-                .also { INSTANCE = it }
+                .fallbackToDestructiveMigration(false) // Never ship production apps with this, because it wipes user data.
+                .build() //creates the database
+                .also { INSTANCE = it } // Store the created database into INSTANCE so next time we can reuse it.
         }
     }
 }
