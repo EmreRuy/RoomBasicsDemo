@@ -16,10 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,13 +31,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+
 
 @Composable
 fun NoteScreen(db: AppDatabase){
@@ -102,6 +103,20 @@ fun NoteScreen(db: AppDatabase){
                                 text = formatTimestamp(note.createdAt),
                                 style = MaterialTheme.typography.bodySmall
                             )
+
+                            IconButton(
+                                onClick = {
+                                    scope.launch {
+                                        noteDao.delete(note) // delete from database
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "Delete Note",
+                                    tint = Color.Red
+                                )
+                            }
                         }
                     }
                 }
@@ -123,20 +138,5 @@ fun NoteScreen(db: AppDatabase){
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add")
         }
-    }
-}
-private fun formatTimestamp(
-    epochMillis: Long?,
-    pattern: String = "d MMM, HH:mm",
-    locale: Locale = Locale.getDefault(),
-    timeZone: TimeZone = TimeZone.getDefault()
-): String {
-    if (epochMillis == null) return ""
-    return try {
-        val sdf = SimpleDateFormat(pattern, locale)
-        sdf.timeZone = timeZone
-        sdf.format(Date(epochMillis))
-    } catch (_: Exception) {
-        epochMillis.toString()
     }
 }
